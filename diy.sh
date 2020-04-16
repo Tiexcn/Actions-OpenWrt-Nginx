@@ -43,7 +43,7 @@ cd -
 
 cp -Rf ../diy/* ./
 # wget https://raw.githubusercontent.com/openwrt/luci/openwrt-19.07/luci.mk -O feeds/luci/luci.mk
-sed -i 's/ @!/ +@!/g' package/*/*/wrtbwmon/Makefile
+sed -i 's/ @!BUSYBOX_DEFAULT_IP:/ +/g' package/*/*/wrtbwmon/Makefile
 sed -i 's/root\/.aria2/usr\/share\/aria2/g' files/usr/share/aria2/aria2.conf
 sed -i 's/root\/Download/data\/download\/aria2/g' files/usr/share/aria2/*
 sed -i '/resolvfile=/d' package/*/*/luci-app-adguardhome/root/etc/init.d/AdGuardHome
@@ -103,12 +103,11 @@ sed -i 's/$(INCLUDE_DIR)\/package.mk/$(TOPDIR)\/feeds\/luci\/luci.mk/g' package/
 sed -i "/foreach pkg/d" feeds/luci/luci.mk;
 sed -i "/foreach pkg/d" package/*/*/luci-*/Makefile
 sed -i '$a $(foreach pkg,$(LUCI_BUILD_PACKAGES),$(eval $(call BuildPackage,$(pkg))))' package/*/*/luci-*/Makefile
-find package/*/*/*/ -maxdepth 1 -d -name "i18n" | xargs -i rename -v 's/i18n/po/' {}
-find package/*/*/*/ -maxdepth 2 -d -name "zh-cn" | xargs -i rename -v 's/zh-cn/zh_Hans/' {}
+find package/custom/*/*/ -maxdepth 2 -d -name "zh-cn" | xargs -i rename -v 's/zh-cn/zh_Hans/' {}
 sed -i "/bin\/upx/d" package/*/*/*/Makefile
-sed -i "/po2lmo /d" package/*/*/*/Makefile
-sed -i "/luci\/i18n/d" package/*/*/*/Makefile
-sed -i "/*\.po/d" package/*/*/luci-app-*/Makefile
+sed -i "/po2lmo /d" package/custom/*/*/Makefile
+sed -i "/luci\/i18n/d" package/custom/*/*/Makefile
+sed -i "/*\.po/d" package/custom/*/*/Makefile
 sed -i "s/+luci\( \|\$\)//g"  package/*/*/*/Makefile
 sed -i "s/+nginx\( \|\$\)/+nginx-ssl\1/g"  package/*/*/*/Makefile
 sed -i "s/askfirst/respawn/g" target/linux/x86/base-files/etc/inittab
